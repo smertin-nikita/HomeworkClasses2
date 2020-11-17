@@ -5,8 +5,14 @@ class Track:
         self.name = name
         self.duration = duration
 
-    def show(self):
-        print(f'{self.name} - {self.duration} мин')
+    def __str__(self):
+        return f'{self.name} - {self.duration} мин'
+
+    def __lt__(self, other):
+        if not isinstance(other, Track):
+            raise TypeError
+        else:
+            return self.duration < other.duration
 
 
 class Album:
@@ -15,18 +21,31 @@ class Album:
         self.band = band
         self.tracks = tracks or []
 
+    def __str__(self):
+        return f'Name group: {self.band} \n' \
+               f'Name album: {self.name} \n' \
+               f'Tracks: \n' \
+               f'   ' + '\n   '.join(map(str, self.tracks))
+
     def get_tracks(self):
         for track in self.tracks:
-            track.show()
+            print(track)
 
     def add_track(self, track):
-        self.tracks.append(track)
+        if not isinstance(track, Track):
+            raise TypeError
+        else:
+            self.tracks.append(track)
 
     def get_duration(self):
         print(sum(map(lambda track: int(track.duration), self.tracks)))
 
 
-album1 = Album(name='album1', band='band', tracks=[Track('track1', 3)])
+track1 = Track('track1', 3)
+track2 = Track('track2', 2)
+track3 = Track('track3', 4)
+print(track1)
+album1 = Album(name='album1', band='band', tracks=[track1, track2, track3])
 album1.get_tracks()
 album1.get_duration()
 
@@ -38,3 +57,8 @@ album2.add_track(Track('trac3', 1))
 album2.add_track(Track('track4', 4))
 album2.get_tracks()
 album2.get_duration()
+
+
+print(album1)
+
+print(track1 > track2)
